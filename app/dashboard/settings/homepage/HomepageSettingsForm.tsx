@@ -470,7 +470,9 @@ export function HomepageSettingsForm({
       {
         id: `platform-detail-${Date.now()}`,
         title: "",
+        titleEn: null,
         description: "",
+        descriptionEn: null,
         iconType: "preset",
         presetIcon: "chat",
         customIconUrl: null,
@@ -1499,6 +1501,22 @@ export function HomepageSettingsForm({
                     placeholder={fh("cardTitlePh")}
                     className="w-full rounded-[var(--radius-btn)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm"
                   />
+                  <input
+                    type="text"
+                    value={item.titleEn ?? ""}
+                    onChange={(e) =>
+                      setPlatformDetailsItems((prev) =>
+                        prev.map((entry) =>
+                          entry.id === item.id
+                            ? { ...entry, titleEn: e.target.value || null }
+                            : entry,
+                        ),
+                      )
+                    }
+                    maxLength={120}
+                    placeholder={fh("cardTitleEnPh")}
+                    className="w-full rounded-[var(--radius-btn)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm"
+                  />
                   <textarea
                     value={item.description}
                     onChange={(e) =>
@@ -1511,6 +1529,22 @@ export function HomepageSettingsForm({
                     rows={2}
                     maxLength={400}
                     placeholder={fh("cardDescPh")}
+                    className="w-full rounded-[var(--radius-btn)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm"
+                  />
+                  <textarea
+                    value={item.descriptionEn ?? ""}
+                    onChange={(e) =>
+                      setPlatformDetailsItems((prev) =>
+                        prev.map((entry) =>
+                          entry.id === item.id
+                            ? { ...entry, descriptionEn: e.target.value || null }
+                            : entry,
+                        ),
+                      )
+                    }
+                    rows={2}
+                    maxLength={400}
+                    placeholder={fh("cardDescEnPh")}
                     className="w-full rounded-[var(--radius-btn)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm"
                   />
                   <div className="flex flex-wrap items-center gap-4">

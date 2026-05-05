@@ -291,7 +291,9 @@ export async function PUT(request: NextRequest) {
           ? presetIconRaw
           : "chat";
         const title = String(item.title ?? "").trim().slice(0, 120);
+        const titleEnRaw = String(item.titleEn ?? "").trim();
         const description = String(item.description ?? "").trim().slice(0, 400);
+        const descriptionEnRaw = String(item.descriptionEn ?? "").trim();
         if (!title || !description) {
           return NextResponse.json(
             { error: `عنوان ووصف البطاقة رقم ${i + 1} مطلوبان` },
@@ -302,7 +304,9 @@ export async function PUT(request: NextRequest) {
         items.push({
           id: String(item.id ?? `platform-detail-${i + 1}`).trim() || `platform-detail-${i + 1}`,
           title,
+          titleEn: titleEnRaw ? titleEnRaw.slice(0, 120) : null,
           description,
+          descriptionEn: descriptionEnRaw ? descriptionEnRaw.slice(0, 400) : null,
           iconType,
           presetIcon,
           customIconUrl: customIconRaw ? customIconRaw.slice(0, 4000) : null,

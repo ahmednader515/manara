@@ -159,6 +159,11 @@ export async function HomePageBelowFold({
   }
 
   const platformDetailsItems = parsePlatformDetailsItems(homepageSettings.platformDetailsItems);
+  const localizedPlatformDetailsItems = platformDetailsItems.map((item) => ({
+    ...item,
+    title: pickLocalizedText(locale, item.title, item.titleEn),
+    description: pickLocalizedText(locale, item.description, item.descriptionEn),
+  }));
 
   const rawReviewsTitle = pickLocalizedText(
     locale,
@@ -285,7 +290,7 @@ export async function HomePageBelowFold({
           title={platformDetailsTitle}
           subtitle={platformDetailsSubtitle || null}
           backgroundColor={homepageSettings.platformDetailsBackgroundColor?.trim() || null}
-          items={platformDetailsItems}
+          items={localizedPlatformDetailsItems}
         />
       ) : null}
 

@@ -84,7 +84,9 @@ export type PlatformDetailsPresetIcon =
 export interface PlatformDetailsItem {
   id: string;
   title: string;
+  titleEn?: string | null;
   description: string;
+  descriptionEn?: string | null;
   iconType: "preset" | "upload";
   presetIcon: PlatformDetailsPresetIcon;
   customIconUrl: string | null;
