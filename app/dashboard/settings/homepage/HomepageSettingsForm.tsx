@@ -459,7 +459,7 @@ export function HomepageSettingsForm({
     if (!canAddPlatformNewsItem) return;
     setPlatformNewsItems((prev) => [
       ...prev,
-      { id: `platform-news-${Date.now()}`, imageUrl: "", description: "" },
+      { id: `platform-news-${Date.now()}`, imageUrl: "", description: "", descriptionEn: null },
     ]);
   }
 
@@ -1836,6 +1836,23 @@ export function HomepageSettingsForm({
                     rows={3}
                     className="mt-1 w-full rounded-[var(--radius-btn)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-foreground)]"
                     placeholder={fh("phNewsCaption")}
+                  />
+                  <label className="mt-2 block text-xs text-[var(--color-muted)]">{fh("eventDescriptionEnLabel")}</label>
+                  <textarea
+                    value={item.descriptionEn ?? ""}
+                    onChange={(e) =>
+                      setPlatformNewsItems((prev) =>
+                        prev.map((entry) =>
+                          entry.id === item.id
+                            ? { ...entry, descriptionEn: e.target.value || null }
+                            : entry,
+                        ),
+                      )
+                    }
+                    maxLength={1000}
+                    rows={2}
+                    className="mt-1 w-full rounded-[var(--radius-btn)] border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-foreground)]"
+                    placeholder={fh("phNewsCaptionEn")}
                   />
                 </div>
               </div>

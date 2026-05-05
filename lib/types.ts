@@ -42,8 +42,10 @@ export interface Category {
 export interface Review {
   id: string;
   text: string;
+  textEn?: string | null;
   authorName: string;
   authorTitle: string | null;
+  authorTitleEn?: string | null;
   avatarLetter: string | null;
   imageUrl: string | null;
   order: number;
@@ -97,6 +99,7 @@ export interface PlatformNewsItem {
   id: string;
   imageUrl: string;
   description: string;
+  descriptionEn?: string | null;
 }
 
 export interface HomepageSetting {

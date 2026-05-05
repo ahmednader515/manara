@@ -36,8 +36,10 @@ export async function PUT(
   }
   let body: {
     text?: string;
+    textEn?: string | null;
     authorName?: string;
     authorTitle?: string | null;
+    authorTitleEn?: string | null;
     avatarLetter?: string | null;
     imageUrl?: string | null;
     order?: number;
@@ -49,9 +51,13 @@ export async function PUT(
   }
   try {
     const updates: Parameters<typeof updateReview>[1] = {};
-    if (body.text !== undefined) updates.text = body.text.trim();
+    if (body.text !== undefined) updates.text = body.text.trim().slice(0, 2000);
+    if (body.textEn !== undefined) updates.text_en = body.textEn?.trim().slice(0, 2000) || null;
     if (body.authorName !== undefined) updates.author_name = body.authorName.trim();
-    if (body.authorTitle !== undefined) updates.author_title = body.authorTitle?.trim() || null;
+    if (body.authorTitle !== undefined) updates.author_title = body.authorTitle?.trim().slice(0, 200) || null;
+    if (body.authorTitleEn !== undefined) {
+      updates.author_title_en = body.authorTitleEn?.trim().slice(0, 200) || null;
+    }
     if (body.avatarLetter !== undefined) updates.avatar_letter = body.avatarLetter?.trim() || null;
     if (body.imageUrl !== undefined) updates.image_url = body.imageUrl?.trim() || null;
     if (body.order !== undefined) updates.order = body.order;

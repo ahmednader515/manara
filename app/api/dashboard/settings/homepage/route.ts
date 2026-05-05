@@ -343,6 +343,7 @@ export async function PUT(request: NextRequest) {
         const item = raw as Record<string, unknown>;
         const imageUrl = String(item.imageUrl ?? "").trim().slice(0, 4000);
         const description = String(item.description ?? "").trim().slice(0, 1000);
+        const descriptionEnRaw = String(item.descriptionEn ?? "").trim();
         if (!imageUrl || !description) {
           return NextResponse.json(
             { error: `صورة ووصف الخبر رقم ${i + 1} مطلوبان` },
@@ -353,6 +354,7 @@ export async function PUT(request: NextRequest) {
           id: String(item.id ?? `platform-news-${i + 1}`).trim() || `platform-news-${i + 1}`,
           imageUrl,
           description,
+          descriptionEn: descriptionEnRaw ? descriptionEnRaw.slice(0, 1000) : null,
         });
       }
       platform_news_items = JSON.stringify(newsItems);

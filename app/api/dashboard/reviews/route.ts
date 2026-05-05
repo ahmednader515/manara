@@ -26,8 +26,10 @@ export async function POST(request: NextRequest) {
   }
   let body: {
     text?: string;
+    textEn?: string | null;
     authorName?: string;
     authorTitle?: string | null;
+    authorTitleEn?: string | null;
     avatarLetter?: string | null;
     imageUrl?: string | null;
     order?: number;
@@ -44,9 +46,11 @@ export async function POST(request: NextRequest) {
   }
   try {
     const review = await createReview({
-      text,
+      text: text.slice(0, 2000),
+      text_en: body.textEn?.trim().slice(0, 2000) || null,
       author_name: authorName,
-      author_title: body.authorTitle?.trim() || null,
+      author_title: body.authorTitle?.trim().slice(0, 200) || null,
+      author_title_en: body.authorTitleEn?.trim().slice(0, 200) || null,
       avatar_letter: body.avatarLetter?.trim() || null,
       image_url: body.imageUrl?.trim() || null,
       order: body.order ?? 0,

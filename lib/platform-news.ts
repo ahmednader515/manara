@@ -12,12 +12,15 @@ export function parsePlatformNewsItems(raw: string | null | undefined): Platform
       .map((item, idx) => {
         const imageUrl = String(item.imageUrl ?? "").trim();
         const description = String(item.description ?? "").trim();
+        const descriptionEnRaw = String(item.descriptionEn ?? "").trim();
         if (!imageUrl || !description) return null;
-        return {
+        const normalizedItem: PlatformNewsItem = {
           id: String(item.id ?? `platform-news-${idx + 1}`).trim() || `platform-news-${idx + 1}`,
           imageUrl: imageUrl.slice(0, 4000),
           description: description.slice(0, 1000),
-        } satisfies PlatformNewsItem;
+          descriptionEn: descriptionEnRaw ? descriptionEnRaw.slice(0, 1000) : null,
+        };
+        return normalizedItem;
       })
       .filter((x): x is PlatformNewsItem => !!x)
       .slice(0, PLATFORM_NEWS_MAX_ITEMS);

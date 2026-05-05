@@ -120,8 +120,12 @@ export async function HomePageBelowFold({
   }
 
   const platformNewsSlides = parsePlatformNewsItems(homepageSettings.platformNewsItems);
+  const localizedPlatformNewsSlides = platformNewsSlides.map((item) => ({
+    ...item,
+    description: pickLocalizedText(locale, item.description, item.descriptionEn),
+  }));
   const showPlatformNewsSection =
-    Boolean(homepageSettings.platformNewsEnabled) && platformNewsSlides.length > 0;
+    Boolean(homepageSettings.platformNewsEnabled) && localizedPlatformNewsSlides.length > 0;
 
   const teachersHomePreview =
     teachersForHome.length > 0
@@ -371,6 +375,8 @@ export async function HomePageBelowFold({
               {reviews.map((r) => {
                 const letter =
                   (r.avatarLetter && r.avatarLetter.trim()) || (r.authorName.trim()[0] ?? "؟");
+                const reviewText = pickLocalizedText(locale, r.text, r.textEn);
+                const reviewAuthorTitle = pickLocalizedText(locale, r.authorTitle, r.authorTitleEn);
                 return (
                   <div
                     key={r.id}
@@ -382,12 +388,12 @@ export async function HomePageBelowFold({
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-medium text-[var(--color-primary)]">{r.authorName}</p>
-                        {r.authorTitle ? (
-                          <p className="mt-0.5 text-xs text-[var(--color-muted)]">{r.authorTitle}</p>
+                        {reviewAuthorTitle ? (
+                          <p className="mt-0.5 text-xs text-[var(--color-muted)]">{reviewAuthorTitle}</p>
                         ) : null}
                       </div>
                     </div>
-                    <p className="mt-4 text-[var(--color-foreground)]">{r.text}</p>
+                    <p className="mt-4 text-[var(--color-foreground)]">{reviewText}</p>
                     {r.imageUrl ? (
                       <div className="mt-4 overflow-hidden rounded-[var(--radius-btn)] border border-[var(--color-border)] bg-black/5 p-2 dark:bg-white/5">
                         <img
@@ -414,7 +420,7 @@ export async function HomePageBelowFold({
             <h2 className="mb-6 text-2xl font-bold text-[var(--color-foreground)]">
               {platformNewsTitle}
             </h2>
-            <HomePlatformNewsSlider items={platformNewsSlides} />
+            <HomePlatformNewsSlider items={localizedPlatformNewsSlides} />
           </div>
         </section>
       ) : null}

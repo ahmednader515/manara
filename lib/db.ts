@@ -696,31 +696,47 @@ async function ensureReviewImageUrlColumn(): Promise<void> {
   });
 }
 
+async function ensureReviewBilingualColumns(): Promise<void> {
+  return ensureOnce("ensureReviewBilingualColumns", async () => {
+    try {
+      await sql`ALTER TABLE "Review" ADD COLUMN IF NOT EXISTS text_en TEXT`;
+      await sql`ALTER TABLE "Review" ADD COLUMN IF NOT EXISTS author_title_en TEXT`;
+    } catch {
+      /* DDL غير متاح أو الجدول غير موجود */
+    }
+  });
+}
+
 export async function getReviews(): Promise<Review[]> {
   await ensureReviewImageUrlColumn();
+  await ensureReviewBilingualColumns();
   const rows = await sql`SELECT * FROM "Review" ORDER BY "order" ASC, created_at DESC`;
   return rowsToCamel(rows as Record<string, unknown>[]) as Review[];
 }
 
 export async function getReviewById(id: string): Promise<Review | null> {
   await ensureReviewImageUrlColumn();
+  await ensureReviewBilingualColumns();
   const rows = await sql`SELECT * FROM "Review" WHERE id = ${id} LIMIT 1`;
   return (rowToCamel(rows[0] as Record<string, unknown>) as Review) ?? null;
 }
 
 export async function createReview(data: {
   text: string;
+  text_en?: string | null;
   author_name: string;
   author_title?: string | null;
+  author_title_en?: string | null;
   avatar_letter?: string | null;
   image_url?: string | null;
   order?: number;
 }): Promise<Review> {
   await ensureReviewImageUrlColumn();
+  await ensureReviewBilingualColumns();
   const id = generateId();
   const rows = await sql`
-    INSERT INTO "Review" (id, text, author_name, author_title, avatar_letter, image_url, "order")
-    VALUES (${id}, ${data.text}, ${data.author_name}, ${data.author_title ?? null}, ${data.avatar_letter ?? null}, ${data.image_url ?? null}, ${data.order ?? 0})
+    INSERT INTO "Review" (id, text, text_en, author_name, author_title, author_title_en, avatar_letter, image_url, "order")
+    VALUES (${id}, ${data.text}, ${data.text_en ?? null}, ${data.author_name}, ${data.author_title ?? null}, ${data.author_title_en ?? null}, ${data.avatar_letter ?? null}, ${data.image_url ?? null}, ${data.order ?? 0})
     RETURNING *
   `;
   const row = rows[0] as Record<string, unknown> | undefined;
@@ -732,17 +748,22 @@ export async function updateReview(
   id: string,
   data: {
     text?: string;
+    text_en?: string | null;
     author_name?: string;
     author_title?: string | null;
+    author_title_en?: string | null;
     avatar_letter?: string | null;
     image_url?: string | null;
     order?: number;
   }
 ): Promise<void> {
   await ensureReviewImageUrlColumn();
+  await ensureReviewBilingualColumns();
   if (data.text !== undefined) await sql`UPDATE "Review" SET text = ${data.text}, updated_at = NOW() WHERE id = ${id}`;
+  if (data.text_en !== undefined) await sql`UPDATE "Review" SET text_en = ${data.text_en}, updated_at = NOW() WHERE id = ${id}`;
   if (data.author_name !== undefined) await sql`UPDATE "Review" SET author_name = ${data.author_name}, updated_at = NOW() WHERE id = ${id}`;
   if (data.author_title !== undefined) await sql`UPDATE "Review" SET author_title = ${data.author_title}, updated_at = NOW() WHERE id = ${id}`;
+  if (data.author_title_en !== undefined) await sql`UPDATE "Review" SET author_title_en = ${data.author_title_en}, updated_at = NOW() WHERE id = ${id}`;
   if (data.avatar_letter !== undefined) await sql`UPDATE "Review" SET avatar_letter = ${data.avatar_letter}, updated_at = NOW() WHERE id = ${id}`;
   if (data.image_url !== undefined) await sql`UPDATE "Review" SET image_url = ${data.image_url}, updated_at = NOW() WHERE id = ${id}`;
   if (data.order !== undefined) await sql`UPDATE "Review" SET "order" = ${data.order}, updated_at = NOW() WHERE id = ${id}`;

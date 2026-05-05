@@ -173,7 +173,9 @@ export const homepageSettingsFormUiAr = {
   newsImageLabel: "صورة الخبر",
   uploadImage: "رفع صورة",
   eventDescriptionLabel: "وصف الحدث",
+  eventDescriptionEnLabel: "Event caption (English)",
   phNewsCaption: "نص يظهر فوق الصورة في الصفحة الرئيسية",
+  phNewsCaptionEn: "English text shown over the image on the homepage",
   addNews: "إضافة خبر",
   addNewsWithCount: "إضافة خبر ({current}/{max})",
 

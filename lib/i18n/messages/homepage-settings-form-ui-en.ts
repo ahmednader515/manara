@@ -171,7 +171,9 @@ export const homepageSettingsFormUiEn = {
   newsImageLabel: "News image",
   uploadImage: "Upload image",
   eventDescriptionLabel: "Event caption",
+  eventDescriptionEnLabel: "Event caption (English)",
   phNewsCaption: "Text shown over the image on the homepage",
+  phNewsCaptionEn: "English text shown over the image on the homepage",
   addNews: "Add news item",
   addNewsWithCount: "Add news item ({current}/{max})",
 
