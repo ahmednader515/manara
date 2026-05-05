@@ -74,7 +74,7 @@ export function parsePlatformDetailsItems(raw: string | null | undefined): Platf
         const descriptionEnRaw = String(item.descriptionEn ?? "").trim();
         if (!title || !description) return null;
         const customIcon = String(item.customIconUrl ?? "").trim();
-        return {
+        const normalizedItem: PlatformDetailsItem = {
           id: String(item.id ?? `platform-detail-${idx + 1}`).trim() || `platform-detail-${idx + 1}`,
           title: title.slice(0, 120),
           titleEn: titleEnRaw ? titleEnRaw.slice(0, 120) : null,
@@ -83,7 +83,8 @@ export function parsePlatformDetailsItems(raw: string | null | undefined): Platf
           iconType: item.iconType === "upload" ? "upload" : "preset",
           presetIcon: preset,
           customIconUrl: customIcon ? customIcon.slice(0, 4000) : null,
-        } satisfies PlatformDetailsItem;
+        };
+        return normalizedItem;
       })
       .filter((x): x is PlatformDetailsItem => !!x)
       .slice(0, 4);
